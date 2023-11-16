@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FinancialData.Infrastructure.Migrations
 {
     [DbContext(typeof(FinancialDataContext))]
-    [Migration("20231113151800_InitialMigration")]
+    [Migration("20231114211204_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -25,40 +25,34 @@ namespace FinancialData.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("FinancialData.Domain.Entities.MetaData", b =>
+            modelBuilder.Entity("FinancialData.Domain.Entities.Metadata", b =>
                 {
                     b.Property<int>("Id")
                         .HasColumnType("int");
 
                     b.Property<string>("Currency")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Exchange")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ExchangeTimeZone")
+                    b.Property<string>("ExchangeTimezone")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Interval")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Symbol")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -88,36 +82,30 @@ namespace FinancialData.Infrastructure.Migrations
 
                     b.Property<string>("Close")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("DateTime")
+                    b.Property<string>("Datetime")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("High")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Low")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Open")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("StockId")
                         .HasColumnType("int");
 
                     b.Property<string>("Volume")
                         .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -126,11 +114,11 @@ namespace FinancialData.Infrastructure.Migrations
                     b.ToTable("TimeSeries");
                 });
 
-            modelBuilder.Entity("FinancialData.Domain.Entities.MetaData", b =>
+            modelBuilder.Entity("FinancialData.Domain.Entities.Metadata", b =>
                 {
                     b.HasOne("FinancialData.Domain.Entities.Stock", "Stock")
-                        .WithOne("MetaData")
-                        .HasForeignKey("FinancialData.Domain.Entities.MetaData", "Id")
+                        .WithOne("Metadata")
+                        .HasForeignKey("FinancialData.Domain.Entities.Metadata", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -148,7 +136,7 @@ namespace FinancialData.Infrastructure.Migrations
 
             modelBuilder.Entity("FinancialData.Domain.Entities.Stock", b =>
                 {
-                    b.Navigation("MetaData");
+                    b.Navigation("Metadata");
 
                     b.Navigation("TimeSeries");
                 });

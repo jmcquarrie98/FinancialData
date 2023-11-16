@@ -27,12 +27,12 @@ namespace FinancialData.Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
-                    Symbol = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Currency = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Exchange = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    ExchangeTimeZone = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Interval = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
+                    Symbol = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Exchange = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExchangeTimezone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Interval = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,12 +51,12 @@ namespace FinancialData.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateTime = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    High = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    Low = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    Open = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    Close = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    Volume = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Datetime = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    High = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Low = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Open = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Close = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Volume = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StockId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

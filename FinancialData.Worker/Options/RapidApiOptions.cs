@@ -1,4 +1,4 @@
-﻿namespace FinancialData.Application.Options;
+﻿namespace FinancialData.Worker.Options;
 
 public class RapidApiOptions
 {

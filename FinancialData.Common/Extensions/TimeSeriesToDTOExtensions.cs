@@ -1,28 +1,28 @@
 ﻿using FinancialData.Domain.Entities;
-using FinancialData.Application.DTOs;
+using FinancialData.Common.Dtos;
 
-namespace FinancialData.Application.Extensions;
+namespace FinancialData.Common.Extensions;
 
 public static class TimeSeriesToDTOExtensions
 {
-    public static MetaDataDTO ToDTO(this MetaData metaData)
+    public static MetadataDto ToDto(this Metadata metaData)
     {
-        return new MetaDataDTO
+        return new MetadataDto
         {
             Symbol = metaData.Symbol,
             Type = metaData.Type,
             Currency = metaData.Currency,
             Exchange = metaData.Exchange,
-            ExchangeTimeZone = metaData.ExchangeTimeZone,
+            ExchangeTimezone = metaData.ExchangeTimezone,
             Interval = metaData.Interval
         };
     }
 
-    public static TimeSeriesDTO ToDTO(this TimeSeries timeSeries)
+    public static TimeSeriesDto ToDto(this TimeSeries timeSeries)
     {
-        return new TimeSeriesDTO
+        return new TimeSeriesDto
         {
-            DateTime = timeSeries.DateTime,
+            Datetime = timeSeries.Datetime,
             High = timeSeries.High,
             Low = timeSeries.Low,
             Open = timeSeries.Open,

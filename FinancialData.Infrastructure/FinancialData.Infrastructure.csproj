@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -18,7 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FinancialData.Application\FinancialData.Application.csproj" />
+    <ProjectReference Include="..\FinancialData.WorkerApplication\FinancialData.WorkerApplication.csproj" />
     <ProjectReference Include="..\FinancialData.Domain\FinancialData.Domain.csproj" />
   </ItemGroup>
 

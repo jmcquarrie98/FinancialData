@@ -4,5 +4,5 @@ public class Stock
 {
     public int Id { get; set; }
     public ICollection<TimeSeries> TimeSeries { get; set; } = new List<TimeSeries>();
-    public MetaData? MetaData { get; set; }
+    public Metadata? Metadata { get; set; }
 }

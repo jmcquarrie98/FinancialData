@@ -1,6 +1,7 @@
 ﻿using FinancialData.Domain.Entities;
-using FinancialData.Application.Repositories;
 using Microsoft.EntityFrameworkCore;
+using FinancialData.Domain.Enums;
+using FinancialData.Application.Repositories;
 
 namespace FinancialData.Infrastructure.Repositories;
 
@@ -13,11 +14,11 @@ public class TimeSeriesScheduledRepository : ITimeSeriesScheduledRepository
         _context = context;
     }
 
-    public async Task<Stock> GetStockBySymbolAsync(string symbol)
+    public async Task<Stock> GetStockAsync(string symbol, Interval interval)
     {
-        // Fetch the Stock entity from the database (or create a new one)
-        var stock = await _context.Stocks.Include(s => s.MetaData)
-            .FirstOrDefaultAsync(s => s.MetaData.Symbol == symbol);
+        // Fetch the Stock entity from the database
+        var stock = await _context.Stocks.Include(s => s.Metadata)
+            .FirstOrDefaultAsync(s => s.Metadata.Symbol == symbol && s.Metadata.Interval == interval.Name);
 
         return stock;
     }
@@ -29,9 +30,12 @@ public class TimeSeriesScheduledRepository : ITimeSeriesScheduledRepository
         await _context.SaveChangesAsync();
     }
 
-    public async Task AddTimeSeriesToStockAsync(Stock stock, IEnumerable<TimeSeries> timeSeries)
+    public async Task AddTimeSeriesToStockAsync(string symbol, Interval interval, List<TimeSeries> timeSeries)
     {
-        // Add the TimeSeries entity to the Stock's collection
+        // Fetch the Stock entity from the database
+        var stock = await _context.Stocks.Include(s => s.Metadata)
+            .FirstOrDefaultAsync(s => s.Metadata.Symbol == symbol && s.Metadata.Interval == interval.Name);
+
         ((List<TimeSeries>)stock.TimeSeries).AddRange(timeSeries);
 
         await _context.SaveChangesAsync();
