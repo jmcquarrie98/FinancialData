@@ -8,7 +8,6 @@ using FinancialData.Worker.TimeSeries;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
-using System.Text.Json.Serialization;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
