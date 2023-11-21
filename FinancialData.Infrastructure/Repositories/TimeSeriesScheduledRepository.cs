@@ -1,7 +1,7 @@
 ﻿using FinancialData.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using FinancialData.Domain.Enums;
-using FinancialData.Application.Repositories;
+using FinancialData.WorkerApplication.Repositories;
 
 namespace FinancialData.Infrastructure.Repositories;
 

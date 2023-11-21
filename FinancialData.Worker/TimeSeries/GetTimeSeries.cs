@@ -1,4 +1,4 @@
-﻿using FinancialData.Application.Services;
+﻿using FinancialData.WorkerApplication.Services;
 using FinancialData.Domain.Enums;
 using Quartz;
 

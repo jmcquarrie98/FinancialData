@@ -1,6 +1,6 @@
 ﻿using FinancialData.Domain.Enums;
 
-namespace FinancialData.Application.Services;
+namespace FinancialData.WorkerApplication.Services;
 
 public interface ITimeSeriesScheduledService
 {

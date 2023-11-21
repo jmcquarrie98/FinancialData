@@ -1,10 +1,10 @@
 ﻿using FinancialData.Domain.Entities;
 using FinancialData.Common.Extensions;
 using FinancialData.Domain.Enums;
-using FinancialData.Application.Clients;
-using FinancialData.Application.Repositories;
+using FinancialData.WorkerApplication.Clients;
+using FinancialData.WorkerApplication.Repositories;
 
-namespace FinancialData.Application.Services;
+namespace FinancialData.WorkerApplication.Services;
 
 public class TimeSeriesScheduledService : ITimeSeriesScheduledService
 {

@@ -1,7 +1,7 @@
 ﻿using FinancialData.Domain.Entities;
 using FinancialData.Domain.Enums;
 
-namespace FinancialData.Application.Repositories;
+namespace FinancialData.WorkerApplication.Repositories;
 
 public interface ITimeSeriesScheduledRepository
 {

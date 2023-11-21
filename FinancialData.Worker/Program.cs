@@ -1,12 +1,14 @@
-using FinancialData.Application.Clients;
-using FinancialData.Application.Repositories;
-using FinancialData.Application.Services;
+using FinancialData.WorkerApplication.Clients;
+using FinancialData.WorkerApplication.Repositories;
+using FinancialData.WorkerApplication.Services;
 using FinancialData.Infrastructure;
 using FinancialData.Infrastructure.Repositories;
 using FinancialData.Worker.Options;
 using FinancialData.Worker.TimeSeries;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
+using System.Text.Json.Serialization;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
@@ -17,7 +19,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         {
             var options = hostContext.Configuration.GetSection(nameof(RapidApiOptions))
                 .Get<RapidApiOptions>();
-            
+
             client.BaseAddress = new Uri(options.BaseUrl);
             client.DefaultRequestHeaders.Add("X-RapidAPI-Host", options.Host);
             client.DefaultRequestHeaders.Add("X-RapidAPI-Key", options.Key);
@@ -47,49 +49,46 @@ IHost host = Host.CreateDefaultBuilder(args)
             var intervalOutputSizesOptions = hostContext.Configuration.GetSection("IntervalOutputSizeOptions")
                 .Get<IntervalOutputSizeOptions[]>();
 
-            foreach (var symbol in symbols)
+            var serializedSymbols = JsonSerializer.Serialize<string[]>(symbols);
+
+            foreach (var intervalOutputSize in intervalOutputSizesOptions)
             {
-                foreach (var intervalOutputSize in intervalOutputSizesOptions)
-                {
-                    var identity = $"{symbol}-{intervalOutputSize.Interval}";
+                var jobKeyOnce = new JobKey($"{intervalOutputSize.Interval}-once-job");
+                var triggerKeyOnce = new TriggerKey($"{intervalOutputSize.Interval}-once-trigger");
 
-                    var jobKeyOnce = new JobKey($"{identity}-once-job");
-                    var triggerKeyOnce = new TriggerKey($"{identity}-once-trigger");
+                q.AddJob<GetStock>(options => options
+                    .WithIdentity(jobKeyOnce)
+                    .UsingJobData("symbols", serializedSymbols)
+                    .UsingJobData("interval", intervalOutputSize.Interval)
+                    .UsingJobData("outputSize", intervalOutputSize.OutputSize)
+                );
 
-                    q.AddJob<GetStock>(options => options
-                        .WithIdentity(jobKeyOnce)
-                        .UsingJobData("symbol", symbol)
-                        .UsingJobData("interval", intervalOutputSize.Interval)
-                        .UsingJobData("outputSize", intervalOutputSize.OutputSize)
-                    );
+                q.AddTrigger(options => options
+                    .ForJob(jobKeyOnce)
+                    .WithIdentity(triggerKeyOnce)
+                    .StartNow()
+                );
 
-                    q.AddTrigger(options => options
-                        .ForJob(jobKeyOnce)
-                        .WithIdentity(triggerKeyOnce)
-                        .StartNow()
-                    );
+                var jobKeyRecurring = new JobKey($"{intervalOutputSize.Interval}-recurring-job");
+                var triggerKeyRecurring = new TriggerKey($"{intervalOutputSize.Interval}-recurring-trigger");
 
-                    var jobKeyRecurring = new JobKey($"{identity}-recurring-job");
-                    var triggerKeyRecurring = new TriggerKey($"{identity}-recurring-trigger");
+                q.AddJob<GetTimeSeries>(options => options
+                    .WithIdentity(jobKeyRecurring)
+                    .UsingJobData("symbols", serializedSymbols)
+                    .UsingJobData("interval", intervalOutputSize.Interval)
+                    .UsingJobData("outputSize", intervalOutputSize.OutputSize)
+                );
 
-                    q.AddJob<GetTimeSeries>(options => options
-                        .WithIdentity(jobKeyRecurring)
-                        .UsingJobData("symbol", symbol)
-                        .UsingJobData("interval", intervalOutputSize.Interval)
-                        .UsingJobData("outputSize", intervalOutputSize.OutputSize)
-                    );
-
-                    q.AddTrigger(options => options
-                        .ForJob(jobKeyRecurring)
-                        .WithIdentity(triggerKeyRecurring)
-                        .WithSimpleSchedule(s => s
-                            .WithIntervalInMinutes(intervalOutputSize.OutputSize)
-                            .RepeatForever())
-                        .StartAt(DateTimeOffset.Now.
-                            AddMinutes(intervalOutputSize.OutputSize)
-                        )
-                    );
-                }
+                q.AddTrigger(options => options
+                    .ForJob(jobKeyRecurring)
+                    .WithIdentity(triggerKeyRecurring)
+                    .WithSimpleSchedule(s => s
+                        .WithIntervalInMinutes(intervalOutputSize.OutputSize)
+                        .RepeatForever())
+                    .StartAt(DateTimeOffset.Now.
+                        AddMinutes(intervalOutputSize.OutputSize)
+                    )
+                );
             }
         });
 
